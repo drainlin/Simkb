@@ -235,7 +235,7 @@ class Achievement {
     _courseNature = json['courseNature'];
     _examinationNature = json['examinationNature'];
     _kcbh = json['kcbh'];
-    _credit = json['credit'];
+    _credit = json['credit'].toDouble();
     _cj0708id = json['cj0708id'];
     _fraction = json['fraction'];
   }

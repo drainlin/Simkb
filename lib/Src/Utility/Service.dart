@@ -1,19 +1,20 @@
 enum Service { userinfo, classtable, grades, exams, socialExams, terms }
 
-String getServiceURL(Service type) {
+String getServiceURL(Service type, {String week = "1"}) {
+  const jwURL = "http://mjw.cdut.edu.cn/cdlgdxhd";
   switch (type) {
     case Service.userinfo:
-      return "/initUserInfo2";
+      return "$jwURL/initUserInfo2";
     case Service.classtable:
-      return "/student/curriculum?week=&kbjcmsid=";
+      return "$jwURL/student/curriculum?week=$week&kbjcmsid=";
     case Service.grades:
-      return "/student/termGPA?semester=&type=1";
+      return "$jwURL/student/termGPA?semester=&type=1";
     case Service.exams:
-      return "/student/examinationArrangement";
+      return "$jwURL/student/examinationArrangement";
     case Service.socialExams:
-      return "/student/socialTestScores";
+      return "$jwURL/student/socialTestScores";
     case Service.terms:
-      return "/semesterList";
+      return "$jwURL/semesterList";
     default:
       return "";
   }
