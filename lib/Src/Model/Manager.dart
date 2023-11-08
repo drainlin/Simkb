@@ -21,7 +21,7 @@ final _Dio = Dio();
 
 class Manager {
   Manager._() {
-    _prepareForFiddler();
+    // _prepareForFiddler();
   }
   static const _loginURL =
       "https://cas.paas.cdut.edu.cn/cas/login?service=http%3A%2F%2Fmjw.cdut.edu.cn%2Fcdlgdxhd%2FloginSso&redirect_uri=http%3A%2F%2Fpaym-cdut-edu-cn.vpn.cdut.edu.cn%3A8118%2FcasLogin%2F";
@@ -34,13 +34,11 @@ class Manager {
 
   void _prepareForFiddler() {
     if (!kDebugMode) return;
-    (_Dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
+    (_Dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
       client.findProxy = (url) {
         return "PROXY 192.168.10.114:8888";
       };
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
       return null;
     };
   }
@@ -122,8 +120,7 @@ class Manager {
     }
   }
 
-  Future<ClassTableModel?> getClassTable(String token,
-      {String week = "1"}) async {
+  Future<ClassTableModel?> getClassTable(String token, {String week = "1"}) async {
     var result = await _Dio.get(getServiceURL(Service.classtable, week: week),
         options: Options(headers: {
           "token": token,
