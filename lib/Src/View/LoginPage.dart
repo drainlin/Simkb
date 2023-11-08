@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -16,10 +18,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var _username = "202202070102";
-  var _password = "Qs961314..0*5";
-  // var _username = "";
-  // var _password = "";
+  // var _username = "202202070102";
+  // var _password = "Qs961314..0*5";
+  var _username = "";
+  var _password = "";
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   @override
@@ -54,7 +56,8 @@ class _LoginPageState extends State<LoginPage> {
                 onChanged: (value) => _username = value,
                 controller: _usernameController,
                 inputFormatters: [
-                  FilteringTextInputFormatter(RegExp("^[a-z0-9A-Z]+"), allow: true), //只允许输入数字，字母
+                  FilteringTextInputFormatter(RegExp("^[a-z0-9A-Z]+"),
+                      allow: true), //只允许输入数字，字母
                 ]),
             TextField(
               decoration: const InputDecoration(
@@ -87,21 +90,39 @@ class _LoginPageState extends State<LoginPage> {
       if (value.$1) {
         Global.token.value = value.$2;
         Tool.printLog(Global.token.value);
-        Manager().updateAll(Global.token.value);
-        SmartDialog.dismiss();
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: const Text("成功"),
-                  content: const Text("可以查看数据了"),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: const Text("确定"))
-                  ],
-                ));
+        Manager().updateAll(Global.token.value).then((value) {
+          SmartDialog.dismiss();
+          if (value) {
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: const Text("成功"),
+                      content: const Text("即将重启App以更新数据"),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Get.back();
+                              exit(0);
+                            },
+                            child: const Text("确定"))
+                      ],
+                    ));
+          } else {
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: const Text("失败"),
+                      content: const Text("遇到了一点问题"),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text("确定"))
+                      ],
+                    ));
+          }
+        });
       } else {
         Tool.printLog(value.$2);
         SmartDialog.dismiss();

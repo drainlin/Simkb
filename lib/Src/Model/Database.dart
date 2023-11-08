@@ -30,7 +30,8 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), _databaseName);
-    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(path,
+        version: _databaseVersion, onCreate: _onCreate);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -80,7 +81,7 @@ class DatabaseHelper {
     weekDay TEXT,
     classroomName TEXT,
     startTime TEXT,
-    endTime TEXT,
+    endTIme TEXT,
     location TEXT,
     fzmc TEXT,
     classWeekDetails TEXT,
@@ -201,16 +202,16 @@ class DatabaseHelper {
     await db.delete('socialgrades');
   }
 
-  void insertClassTable(ClassTablesModel data) async {
+  void insertClassTable(ClassTablesModel data, int week) async {
     Database db = await instance.database;
     if (data.data == null || data.data!.first.courses == null) {
       return;
     }
-    final week = data.data!.first.week ?? 1;
 
     for (var element in data.data!.first.courses!) {
       final weekday = int.parse(element.weekDay ?? "1");
-      final date = Global.termStart.add(Duration(days: (week - 1) * 7 + weekday - 1));
+      final date =
+          Global.termStart.add(Duration(days: (week - 1) * 7 + weekday - 1));
       Map<String, dynamic> row = {
         'date': DateFormat('yyyy-MM-dd').format(date),
         'classWeek': element.classWeek,

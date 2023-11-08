@@ -34,11 +34,13 @@ class Manager {
 
   void _prepareForFiddler() {
     if (!kDebugMode) return;
-    (_Dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+    (_Dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
       client.findProxy = (url) {
         return "PROXY 192.168.10.114:8888";
       };
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       return null;
     };
   }
@@ -120,24 +122,26 @@ class Manager {
     }
   }
 
-  void getClassTable(
+  Future<void> getClassTable(
     String token,
   ) async {
-    var results = [];
+    List<Map<int, ClassTablesModel>> results = [];
     for (int week = 1; week <= 20; week++) {
-      var result = await _Dio.get(getServiceURL(Service.classtable, week: week.toString()),
+      var result = await _Dio.get(
+          getServiceURL(Service.classtable, week: week.toString()),
           options: Options(headers: {
             "token": token,
           }));
       if (result.statusCode == 200) {
         var response = ClassTablesModel.fromJson(result.data);
-        results.add(response);
+        results.add({week: response});
       }
     }
     if (results.isEmpty) return;
     DatabaseHelper.instance.clearClassTable();
     for (var response in results) {
-      DatabaseHelper.instance.insertClassTable(response);
+      DatabaseHelper.instance
+          .insertClassTable(response.values.first, response.keys.first);
     }
   }
 
@@ -193,6 +197,7 @@ class Manager {
         }));
     if (result.statusCode == 200) {
       var response = UserInfoModel.fromJson(result.data);
+      Global.userInfo.value = response;
       DatabaseHelper.instance.clearUser();
       DatabaseHelper.instance.insertUser(response);
       return response;
@@ -213,13 +218,20 @@ class Manager {
     }
   }
 
-  void updateAll(String token) async {
-    getClassTable(token);
-    getGrades(token);
-    getExams(token);
-    getSocialExams(token);
-    getUserInfo(token);
-    getTerms(token);
+  Future<bool> updateAll(String token) async {
+    var result = Future.wait([
+      getClassTable(token),
+      getGrades(token),
+      getExams(token),
+      getSocialExams(token),
+      getUserInfo(token),
+      getTerms(token)
+    ]);
+    return result.then((value) {
+      return true;
+    }).catchError((e) {
+      return false;
+    });
   }
 
   void initLocal() async {
@@ -234,6 +246,9 @@ class Manager {
     Global.password.value = password;
     if (username.isNotEmpty) {
       Global.isLogined.value = true;
+      DatabaseHelper.instance.getUserInfo().then((value) {
+        Global.userInfo.value = value;
+      });
     } else {
       Global.isLogined.value = false;
     }
