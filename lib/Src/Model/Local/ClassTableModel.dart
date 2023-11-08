@@ -1,4 +1,5 @@
 class ClassTableModel {
+  String? _date;
   String? _classWeek;
   String? _teacherName;
   String? _weekNoteDetail;
@@ -22,7 +23,8 @@ class ClassTableModel {
   int? _coursesNote;
 
   ClassTableModel(
-      {String? classWeek,
+      {String? date,
+      String? classWeek,
       String? teacherName,
       String? weekNoteDetail,
       String? buttonCode,
@@ -43,6 +45,9 @@ class ClassTableModel {
       String? fzmc,
       String? classWeekDetails,
       int? coursesNote}) {
+    if (date != null) {
+      _date = date;
+    }
     if (classWeek != null) {
       _classWeek = classWeek;
     }
@@ -108,13 +113,14 @@ class ClassTableModel {
     }
   }
 
+  String? get date => _date;
+  set date(String? date) => _date = date;
   String? get classWeek => _classWeek;
   set classWeek(String? classWeek) => _classWeek = classWeek;
   String? get teacherName => _teacherName;
   set teacherName(String? teacherName) => _teacherName = teacherName;
   String? get weekNoteDetail => _weekNoteDetail;
-  set weekNoteDetail(String? weekNoteDetail) =>
-      _weekNoteDetail = weekNoteDetail;
+  set weekNoteDetail(String? weekNoteDetail) => _weekNoteDetail = weekNoteDetail;
   String? get buttonCode => _buttonCode;
   set buttonCode(String? buttonCode) => _buttonCode = buttonCode;
   int? get xkrs => _xkrs;
@@ -148,12 +154,12 @@ class ClassTableModel {
   String? get fzmc => _fzmc;
   set fzmc(String? fzmc) => _fzmc = fzmc;
   String? get classWeekDetails => _classWeekDetails;
-  set classWeekDetails(String? classWeekDetails) =>
-      _classWeekDetails = classWeekDetails;
+  set classWeekDetails(String? classWeekDetails) => _classWeekDetails = classWeekDetails;
   int? get coursesNote => _coursesNote;
   set coursesNote(int? coursesNote) => _coursesNote = coursesNote;
 
   ClassTableModel.fromJson(Map<String, dynamic> json) {
+    _date = json['date'];
     _classWeek = json['classWeek'];
     _teacherName = json['teacherName'];
     _weekNoteDetail = json['weekNoteDetail'];
@@ -179,6 +185,7 @@ class ClassTableModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['date'] = _date;
     data['classWeek'] = _classWeek;
     data['teacherName'] = _teacherName;
     data['weekNoteDetail'] = _weekNoteDetail;

@@ -1,9 +1,9 @@
-class ClassTableModel {
+class ClassTablesModel {
   String? _msg;
   String? _code;
   List<Data>? _data;
 
-  ClassTableModel({String? msg, String? code, List<Data>? data}) {
+  ClassTablesModel({String? msg, String? code, List<Data>? data}) {
     if (msg != null) {
       _msg = msg;
     }
@@ -22,7 +22,7 @@ class ClassTableModel {
   List<Data>? get data => _data;
   set data(List<Data>? data) => _data = data;
 
-  ClassTableModel.fromJson(Map<String, dynamic> json) {
+  ClassTablesModel.fromJson(Map<String, dynamic> json) {
     _msg = json['Msg'];
     _code = json['code'];
     if (json['data'] != null) {
@@ -212,8 +212,7 @@ class Courses {
   String? get teacherName => _teacherName;
   set teacherName(String? teacherName) => _teacherName = teacherName;
   String? get weekNoteDetail => _weekNoteDetail;
-  set weekNoteDetail(String? weekNoteDetail) =>
-      _weekNoteDetail = weekNoteDetail;
+  set weekNoteDetail(String? weekNoteDetail) => _weekNoteDetail = weekNoteDetail;
   String? get buttonCode => _buttonCode;
   set buttonCode(String? buttonCode) => _buttonCode = buttonCode;
   int? get xkrs => _xkrs;
@@ -247,8 +246,7 @@ class Courses {
   String? get fzmc => _fzmc;
   set fzmc(String? fzmc) => _fzmc = fzmc;
   String? get classWeekDetails => _classWeekDetails;
-  set classWeekDetails(String? classWeekDetails) =>
-      _classWeekDetails = classWeekDetails;
+  set classWeekDetails(String? classWeekDetails) => _classWeekDetails = classWeekDetails;
   int? get coursesNote => _coursesNote;
   set coursesNote(int? coursesNote) => _coursesNote = coursesNote;
 
@@ -310,12 +308,7 @@ class TopInfo {
   String? _weekday;
   String? _maxWeek;
 
-  TopInfo(
-      {String? semesterId,
-      String? week,
-      String? today,
-      String? weekday,
-      String? maxWeek}) {
+  TopInfo({String? semesterId, String? week, String? today, String? weekday, String? maxWeek}) {
     if (semesterId != null) {
       _semesterId = semesterId;
     }

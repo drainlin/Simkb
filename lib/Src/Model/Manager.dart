@@ -7,12 +7,12 @@ import 'package:simkb/Src/Model/Database.dart';
 import 'package:simkb/Src/Model/Encrypt.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:simkb/Src/Model/Localstorage.dart';
-import 'package:simkb/Src/Response/ClassTableModel.dart';
-import 'package:simkb/Src/Response/ExamsModel.dart';
-import 'package:simkb/Src/Response/GradesModel.dart';
-import 'package:simkb/Src/Response/SocialExamsModel.dart';
-import 'package:simkb/Src/Response/TermsModel.dart';
-import 'package:simkb/Src/Response/UserInfoModel.dart';
+import 'package:simkb/Src/Model/Response/ClassTablesModel.dart';
+import 'package:simkb/Src/Model/Response/ExamsModel.dart';
+import 'package:simkb/Src/Model/Response/GradesModel.dart';
+import 'package:simkb/Src/Model/Response/SocialExamsModel.dart';
+import 'package:simkb/Src/Model/Response/TermsModel.dart';
+import 'package:simkb/Src/Model/Response/UserInfoModel.dart';
 import 'package:simkb/Src/Utility/Global.dart';
 import 'package:simkb/Src/Utility/Service.dart';
 import '../Utility/Tool.dart';
@@ -120,18 +120,24 @@ class Manager {
     }
   }
 
-  Future<ClassTableModel?> getClassTable(String token, {String week = "1"}) async {
-    var result = await _Dio.get(getServiceURL(Service.classtable, week: week),
-        options: Options(headers: {
-          "token": token,
-        }));
-    if (result.statusCode == 200) {
-      var response = ClassTableModel.fromJson(result.data);
-      DatabaseHelper.instance.clearClassTable();
+  void getClassTable(
+    String token,
+  ) async {
+    var results = [];
+    for (int week = 1; week <= 20; week++) {
+      var result = await _Dio.get(getServiceURL(Service.classtable, week: week.toString()),
+          options: Options(headers: {
+            "token": token,
+          }));
+      if (result.statusCode == 200) {
+        var response = ClassTablesModel.fromJson(result.data);
+        results.add(response);
+      }
+    }
+    if (results.isEmpty) return;
+    DatabaseHelper.instance.clearClassTable();
+    for (var response in results) {
       DatabaseHelper.instance.insertClassTable(response);
-      return response;
-    } else {
-      return ClassTableModel();
     }
   }
 
@@ -208,11 +214,12 @@ class Manager {
   }
 
   void updateAll(String token) async {
-    await getGrades(token);
-    await getExams(token);
-    await getSocialExams(token);
-    await getUserInfo(token);
-    await getTerms(token);
+    getClassTable(token);
+    getGrades(token);
+    getExams(token);
+    getSocialExams(token);
+    getUserInfo(token);
+    getTerms(token);
   }
 
   void initLocal() async {

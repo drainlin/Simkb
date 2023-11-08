@@ -1,10 +1,13 @@
+import 'package:intl/intl.dart';
+import 'package:simkb/Src/Model/Local/ClassTableModel.dart';
 import 'package:simkb/Src/Model/Local/GradeModel.dart';
 import 'package:simkb/Src/Model/Local/SocialExamModel.dart';
-import 'package:simkb/Src/Response/ClassTableModel.dart';
-import 'package:simkb/Src/Response/ExamsModel.dart';
-import 'package:simkb/Src/Response/GradesModel.dart';
-import 'package:simkb/Src/Response/SocialExamsModel.dart';
-import 'package:simkb/Src/Response/UserInfoModel.dart';
+import 'package:simkb/Src/Model/Response/ClassTablesModel.dart';
+import 'package:simkb/Src/Model/Response/ExamsModel.dart';
+import 'package:simkb/Src/Model/Response/GradesModel.dart';
+import 'package:simkb/Src/Model/Response/SocialExamsModel.dart';
+import 'package:simkb/Src/Model/Response/UserInfoModel.dart';
+import 'package:simkb/Src/Utility/Global.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -27,8 +30,7 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), _databaseName);
-    return await openDatabase(path,
-        version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -61,7 +63,7 @@ class DatabaseHelper {
     await db.execute('''
   CREATE TABLE courses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    week TEXT,
+    date TEXT,
     classWeek TEXT,
     teacherName TEXT,
     weekNoteDetail TEXT,
@@ -199,15 +201,18 @@ class DatabaseHelper {
     await db.delete('socialgrades');
   }
 
-  void insertClassTable(ClassTableModel data) async {
+  void insertClassTable(ClassTablesModel data) async {
     Database db = await instance.database;
     if (data.data == null || data.data!.first.courses == null) {
       return;
     }
-    final week = data.data!.first.week.toString();
+    final week = data.data!.first.week ?? 1;
+
     for (var element in data.data!.first.courses!) {
+      final weekday = int.parse(element.weekDay ?? "1");
+      final date = Global.termStart.add(Duration(days: (week - 1) * 7 + weekday - 1));
       Map<String, dynamic> row = {
-        'week': week,
+        'date': DateFormat('yyyy-MM-dd').format(date),
         'classWeek': element.classWeek,
         'teacherName': element.teacherName,
         'weekNoteDetail': element.weekNoteDetail,

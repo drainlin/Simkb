@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:simkb/Src/Model/Manager.dart';
-import 'package:simkb/Src/Response/UserInfoModel.dart';
+import 'package:simkb/Src/Model/Response/UserInfoModel.dart';
 import 'package:simkb/Src/Utility/Global.dart';
 
 class UserInfoPage extends StatefulWidget {

@@ -16,10 +16,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // var _username = "202202070102";
-  // var _password = "Qs961314..0*5";
-  var _username = "";
-  var _password = "";
+  var _username = "202202070102";
+  var _password = "Qs961314..0*5";
+  // var _username = "";
+  // var _password = "";
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   @override

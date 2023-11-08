@@ -1,13 +1,12 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:simkb/Src/Model/Manager.dart';
-import 'package:simkb/Src/Utility/Global.dart';
-import 'package:simkb/Src/Utility/Tool.dart';
 import 'package:simkb/Src/View/ExamsPage.dart';
 import 'package:simkb/Src/View/LoginPage.dart';
 import 'package:simkb/Src/View/SocialExamsPage.dart';
-import 'package:simkb/Src/View/UserInfoPage.dart';
+import 'package:simkb/Src/View/TimetablePage.dart';
 
 import 'Src/View/GradesPage.dart';
 
@@ -19,16 +18,18 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Sim课表',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Sim课表'),
-      navigatorObservers: [FlutterSmartDialog.observer],
-      builder: FlutterSmartDialog.init(),
-    );
+    return CalendarControllerProvider(
+        controller: EventController(),
+        child: GetMaterialApp(
+          title: 'Sim课表',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: const MyHomePage(title: 'Sim课表'),
+          navigatorObservers: [FlutterSmartDialog.observer],
+          builder: FlutterSmartDialog.init(),
+        ));
   }
 }
 
@@ -56,51 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       drawer: _buildDrawer(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Obx(() => Text(Global.token.value)),
-            ElevatedButton(
-                onPressed: () {
-                  Manager().getToken("202202070102", "Qs961314..0*5").then((value) {
-                    if (value.$1) {
-                      Global.token.value = value.$2;
-                      Tool.printLog(Global.token.value);
-                    } else {
-                      Tool.printLog(value.$2);
-                    }
-                  });
-                },
-                child: const Text("登陆")),
-            ElevatedButton(
-                onPressed: () {
-                  Manager().updateAll(Global.token.value);
-                },
-                child: const Text("全部刷新")),
-            ElevatedButton(
-                onPressed: () {
-                  Get.to(() => const ExamsPage());
-                },
-                child: const Text("前往Exams")),
-            ElevatedButton(
-                onPressed: () {
-                  Get.to(() => const SocialExamsPage());
-                },
-                child: const Text("前往SocialExams")),
-            ElevatedButton(
-                onPressed: () {
-                  Get.to(() => const GradesPage());
-                },
-                child: const Text("前往Grades")),
-            ElevatedButton(
-                onPressed: () {
-                  Get.to(() => const UserInfoPage());
-                },
-                child: const Text("前往MYpage")),
-          ],
-        ),
-      ),
+      body: const TimetablePage(),
     );
   }
 
