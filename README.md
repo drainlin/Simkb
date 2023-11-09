@@ -37,4 +37,6 @@ Sim TimeTable can help students of Chengdu University of Technology (CDUT)  conv
 
 Thank you to all the people who already contributed to Sim TimeTable!
 
+Please do not commit your changes directly to the master branch, you can commit to the Dev branch. 
+
 If you have any good suggestions, please put them in the issue.

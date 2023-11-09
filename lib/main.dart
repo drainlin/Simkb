@@ -5,10 +5,13 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:simkb/Src/Model/Manager.dart';
 import 'package:simkb/Src/Utility/Global.dart';
+import 'package:simkb/Src/Utility/Tool.dart';
 import 'package:simkb/Src/View/ExamsPage.dart';
 import 'package:simkb/Src/View/LoginPage.dart';
 import 'package:simkb/Src/View/SocialExamsPage.dart';
 import 'package:simkb/Src/View/TimetablePage.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'Src/View/GradesPage.dart';
 
 void main() {
@@ -54,10 +57,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var version = "expired";
   @override
   void initState() {
     super.initState();
     Manager().initLocal();
+    Tool.getAppVersion().then((value) {
+      setState(() {
+        version = value;
+      });
+    });
   }
 
   @override
@@ -111,6 +120,30 @@ class _MyHomePageState extends State<MyHomePage> {
             title: const Text('获取数据'),
             onTap: () {
               Get.to(() => const LoginPage());
+            },
+          ),
+          ListTile(
+            title: Text(version),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: const Text("关于"),
+                        content: const Text(
+                            "本软件仅供学习交流使用\n不得用于商业用途\n本软件不会收集任何用户信息\n请自行负责数据安全\n如果喜欢请在GitHub上为我点亮星星"),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Get.back();
+                                launchUrlString(
+                                    "https://github.com/drainlin/Simkb");
+                              },
+                              child: const Text("GitHub")),
+                          TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("关闭"))
+                        ],
+                      ));
             },
           ),
         ],

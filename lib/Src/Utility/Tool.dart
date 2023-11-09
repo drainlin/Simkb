@@ -2,6 +2,7 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simkb/Src/Model/Local/ClassTableModel.dart';
 import 'package:simkb/Src/Utility/Global.dart';
 
@@ -81,5 +82,10 @@ class Tool {
       return colorStyle[0];
     }
     return colorStyle[i];
+  }
+
+  static Future<String> getAppVersion() async {
+    var result = await PackageInfo.fromPlatform();
+    return "版本：${result.version}(${result.buildNumber})";
   }
 }
