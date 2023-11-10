@@ -16,6 +16,7 @@ Sim TimeTable can help students of Chengdu University of Technology (CDUT)  conv
 
   Just join in our beta test on TestFlight.You should first install TestFlight and click this [invite link](https://testflight.apple.com/join/VpMbVSXl).
 
+
 ## Feature & Todo
 
 - [x] Bachor supported
