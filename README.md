@@ -14,7 +14,8 @@ Sim TimeTable can help students of Chengdu University of Technology (CDUT)  conv
 
 - iOS
 
-  Just join to our beta test on TestFlight.You should first install TestFlight and click this [link](https://testflight.apple.com/join/VpMbVSXl).
+  Just join in our beta test on TestFlight.You should first install TestFlight and click this [invite link](https://testflight.apple.com/join/VpMbVSXl).
+
 
 ## Feature & Todo
 
@@ -33,7 +34,7 @@ Sim TimeTable can help students of Chengdu University of Technology (CDUT)  conv
 - [ ] Master/Doctor supported
 - [ ] More
 
-## Contribute && issue
+## Contribute & issue
 
 Thank you to all the people who already contributed to Sim TimeTable!
 
